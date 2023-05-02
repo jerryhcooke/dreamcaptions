@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Image Training</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
+
+</head>
+<body>
+
+<div class="toggle-container">
+    <label class="toggle-button">
+        <input type="checkbox" id="themeToggle" hidden>
+        <img src="sun.svg" alt="Light Mode" class="light-icon">
+        <img src="moon.svg" alt="Dark Mode" class="dark-icon">
+    </label>
+</div>
+
+<h1>DreamBooth Image Captioning</h1>
+<input type="file" id="fileInput" multiple accept="image/*" style="display:none">
+<label for="fileInput">
+    <div id="dropArea">
+        <p>Drag and drop images here or browse</p>
+    </div>
+</label>
+
+<div id="options">
+    <label for="rename">Rename images:</label>
+    <div class="switch">
+        <input type="checkbox" id="rename" />
+        <label for="rename"></label>
+    </div>
+    <div id="imageRatioAlert" style="display: none; color: red; margin-top: 10px;">
+        Some images are not 1:1.
+        <button id="resizeImagesBtn">Resize Images</button>
+    </div>
+</div>
+
+
+
+<div id="imageList"></div>
+<button id="generateFiles" disabled>Generate TXT Files</button>
+<span id="errorMessage" style="color: red; display: none;"></span>
+<script src="scripts.js"></script>
+</body>
+</html>

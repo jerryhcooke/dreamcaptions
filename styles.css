@@ -1,0 +1,214 @@
+:root {
+    /* Nord Palette */
+    --nord-dark-polar-night-1: #3b4252;
+    --nord-dark-polar-night-2: #434c5e;
+    --nord-dark-polar-night-3: #4c566a;
+    --nord-dark-snow-storm-1: #d8dee9;
+    --nord-dark-snow-storm-2: #e5e9f0;
+    --nord-dark-snow-storm-3: #eceff4;
+    --nord-dark-textbox: #2e3440;
+
+    --nord-light-polar-night-1: #2e3440;
+    --nord-light-polar-night-2: #3b4252;
+    --nord-light-polar-night-3: #434c5e;
+    --nord-light-snow-storm-1: #d8dee9;
+    --nord-light-snow-storm-2: #e5e9f0;
+    --nord-light-snow-storm-3: #eceff4;
+    --nord-light-textbox: #e5e9f0;
+
+    /* Frost Palette */
+    --nord-dark-frost-1: #8fbcbb;
+    --nord-dark-frost-2: #88c0d0;
+    --nord-dark-frost-3: #81a1c1;
+    --nord-dark-frost-4: #5e81ac;
+    --nord-dark-frost-5: #4c566a;
+
+    --nord-light-frost-1: #2e3440;
+    --nord-light-frost-2: #3b4252;
+    --nord-light-frost-3: #434c5e;
+    --nord-light-frost-4: #d8dee9;
+    --nord-light-frost-5: #e5e9f0;
+
+    /* Aurora Palette */
+    --nord-dark-aurora-1: #bf616a;
+    --nord-dark-aurora-2: #d08770;
+    --nord-dark-aurora-3: #ebcb8b;
+    --nord-dark-aurora-4: #a3be8c;
+    --nord-dark-aurora-5: #b48ead;
+
+    --nord-light-aurora-1: #bf616a;
+    --nord-light-aurora-2: #d08770;
+    --nord-light-aurora-3: #ebcb8b;
+    --nord-light-aurora-4: #a3be8c;
+    --nord-light-aurora-5: #b48ead;
+}
+
+body.dark {
+    background-color: var(--nord-dark-polar-night-1);
+    color: var(--nord-dark-aurora-3); /* Update the color variable here */
+}
+
+body.dark textarea {
+    background-color: var(--nord-dark-textbox);
+    color: var(--nord-dark-snow-storm-3);
+}
+
+body.light {
+    background-color: var(--nord-light-snow-storm-3);
+    color: var(--nord-dark-polar-night-2); /* Update the color variable here */
+}
+
+body.light textarea {
+    background-color: var(--nord-light-textbox);
+    color: var(--nord-light-polar-night-2);
+}
+
+.toggle-container {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+}
+
+.toggle-button {
+    cursor: pointer;
+    display: inline-block;
+    background-color: var(--nord-dark-polar-night-2);
+    border-radius: 20px;
+    padding: 5px 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s;
+}
+
+button, a.button {
+    cursor: pointer;
+    display: inline-block;
+    background-color: var(--nord-dark-polar-night-2);
+    border-radius: 20px;
+    padding: 5px 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s;
+    border: none;
+    color: #fff;
+    font-family: inherit;
+    font-size: 1rem;
+    outline: none;
+    text-decoration: none;
+}
+
+body.light .toggle-button {
+    background-color: var(--nord-light-polar-night-1);
+}
+
+.toggle-button img {
+    height: 20px;
+    vertical-align: middle;
+}
+
+
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#dropArea {
+    width: 300px;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    background-color: rgba(255, 255, 255, 0.2); /* Add semi-transparent background */
+    border-radius: 15px; /* Add rounded corners */
+    box-shadow: inset 0px 2px 4px rgba(0, 0, 0, 0.4); /* Add inset shadow */
+}
+
+body.dark #dropArea {
+    background-color: rgba(0, 0, 0, 0.2); /* Change semi-transparent background color for dark mode */
+}
+
+#imageList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.imageContainer {
+    width: 200px;
+    height: 400px;
+    object-fit: cover;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: end; /* Add center alignment */
+    margin: 8px;
+}
+
+img {
+    max-width: 200px;
+    max-height: 200px;
+    margin-bottom: 5px;
+    border-radius: 15px; /* Add rounded corners */
+}
+
+textarea {
+    width: 200px;
+    height: 75px;
+    resize: none;
+    margin-bottom: 5px;
+    align-self: end;
+    margin: 5px;
+    border-radius: 15px; /* Add rounded corners */
+}
+
+.switch {
+    display: inline-block;
+    position: relative;
+    width: 50px;
+    height: 26px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.switch label {
+    display: block;
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    border-radius: 26px;
+    transition: background-color 0.3s;
+}
+
+.switch label::before {
+    display: block;
+    position: absolute;
+    content: "";
+    width: 20px;
+    height: 20px;
+    left: 3px;
+    bottom: 3px;
+    background-color: #fff;
+    border-radius: 20px;
+    transition: transform 0.3s;
+}
+
+.switch input:checked + label {
+    background-color: #2196F3;
+}
+
+.switch input:checked + label::before {
+    transform: translateX(24px);
+}
