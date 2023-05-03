@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const croppieImage = imageElement;
         const currentContainer = croppieImage.parentElement;
+        const textarea = currentContainer.querySelector('textarea');
 
         setTimeout(() => {
             const croppieInstance = new Croppie(croppieImage, {
@@ -42,9 +43,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
             currentContainer.appendChild(croppieInstance.element);
 
+            // Create a new div for the croppie controls
+            const croppieControls = document.createElement('div');
+            croppieControls.classList.add('croppie-controls');
+
             // Add the confirm button
             const confirmButton = document.createElement('button');
-            confirmButton.textContent = 'Confirm';
+            confirmButton.classList.add('confirm-button');
+            confirmButton.innerHTML = '&#10003;';
             confirmButton.addEventListener('click', () => {
                 // Get the cropped image and replace the original image
                 croppieInstance.result({ type: 'base64', size: 'original', format: 'jpeg' }).then((result) => {
@@ -56,10 +62,21 @@ document.addEventListener("DOMContentLoaded", function () {
                         currentContainer.querySelector('.cr-boundary').remove();
                         currentContainer.querySelector('.cr-slider-wrap').remove();
                         confirmButton.remove();
+
+                        // Re-display the textarea
+                        textarea.style.display = 'block';
+                        // Append the textarea after the image
+                        currentContainer.querySelector('img').after(textarea);
                     };
                 });
             });
-            currentContainer.appendChild(confirmButton);
+
+            // Add the confirm button to the croppie controls div
+            croppieControls.appendChild(croppieInstance.element.querySelector('.cr-slider-wrap'));
+            croppieControls.appendChild(confirmButton);
+
+            // Add the croppie controls div to the current container
+            currentContainer.appendChild(croppieControls);
 
         }, 0);
     }

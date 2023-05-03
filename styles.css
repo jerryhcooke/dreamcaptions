@@ -135,9 +135,35 @@ body.dark #dropArea {
     margin-bottom: 16px;
 }
 
-.imageContainer .croppie-container ~ textarea {
+.imageContainer > textarea:nth-child(1) {
     display: none;
 }
+
+.imageContainer.cropped > textarea:nth-child(1) {
+    display: block;
+}
+
+.croppie-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 180px;
+}
+
+.cr-slider-wrap {
+    width: 150px;
+}
+.cr-slider {
+    width: 140px;
+}
+.confirm-button {
+    padding: 5px;
+    padding-left: 10px;
+    font-size: 20px;
+    line-height: 20px;
+    text-align: center;
+}
+
 
 .imageElement{
     width: 200px;
@@ -151,10 +177,6 @@ body.dark #dropArea {
     position: relative;
 }
 
-.confirm-btn {
-    display: block;
-    margin: 8px auto 0;
-}
 
 .imageContainer {
     position: relative;
