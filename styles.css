@@ -102,10 +102,9 @@ body.light .toggle-button {
 .toggle-button img {
     height: 20px;
     vertical-align: middle;
+    width: 20px;
+    display: inline;
 }
-
-
-
 body {
     font-family: Arial, sans-serif;
     display: flex;
@@ -136,22 +135,35 @@ body.dark #dropArea {
     margin-bottom: 16px;
 }
 
-.imageContainer {
+.imageElement{
     width: 200px;
     height: 400px;
     object-fit: cover;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: left;
     justify-content: end; /* Add center alignment */
     margin: 8px;
+    position: relative;
+}
+
+.confirm-btn {
+    display: block;
+    margin: 8px auto 0;
+}
+
+.imageContainer {
+    position: relative;
+    padding-bottom: 32px; /* Add space for the confirm button */
 }
 
 img {
-    max-width: 200px;
-    max-height: 200px;
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
     margin-bottom: 5px;
-    border-radius: 15px; /* Add rounded corners */
+    border-radius: 15px;
+    display: block; /* Add this line */
 }
 
 textarea {
@@ -162,6 +174,8 @@ textarea {
     align-self: end;
     margin: 5px;
     border-radius: 15px; /* Add rounded corners */
+    display: block;
+
 }
 
 .switch {
