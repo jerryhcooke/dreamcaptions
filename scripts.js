@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     const dropArea = document.getElementById('dropArea');
     const fileInput = document.getElementById('fileInput');
-    const rename = document.getElementById('rename');
     const imageList = document.getElementById('imageList');
     const generateFiles = document.getElementById('generateFiles');
     const themeToggle = document.getElementById('themeToggle');
@@ -65,12 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 0);
     }
 
-    resizeImagesBtn.addEventListener('click', () => {
-        const imageElement = resizeImagesBtn.imageElement;
-        if (imageElement) {
-            resizeImage(imageElement);
-        }
-    });
+
 
 
     themeToggle.addEventListener('change', () => {
@@ -132,7 +126,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function handleFiles(files) {
         imageList.innerHTML = '';
-        Array.from(files).forEach((file, index) => {
+        Array.from(files).forEach((file) => {
             const reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = () => {
