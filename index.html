@@ -3,12 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Image Training</title>
+    <title>DreamCaptions</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
-
 </head>
 <body>
 
@@ -20,7 +17,8 @@
     </label>
 </div>
 
-<h1>DreamBooth Image Captioning</h1>
+<h1>DreamCaptions</h1>
+<h5>A lightweight captioner for AI image model training</h5>
 <input type="file" id="fileInput" multiple accept="image/*" style="display:none">
 <label for="fileInput">
     <div id="dropArea">
@@ -28,22 +26,8 @@
     </div>
 </label>
 
-<div id="options">
-    <label for="rename">Rename images:</label>
-    <div class="switch">
-        <input type="checkbox" id="rename" />
-        <label for="rename"></label>
-    </div>
-    <div id="imageRatioAlert" style="display: none; color: red; margin-top: 10px;">
-        Some images are not 1:1.
-        <button id="resizeImagesBtn">Resize Images</button>
-    </div>
-</div>
-
-
-
 <div id="imageList"></div>
-<button id="generateFiles" disabled>Generate TXT Files</button>
+<button id="generateFiles" disabled>Finish and download</button>
 <span id="errorMessage" style="color: red; display: none;"></span>
 <script src="scripts.js"></script>
 </body>

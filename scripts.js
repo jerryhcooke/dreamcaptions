@@ -5,94 +5,16 @@ document.addEventListener("DOMContentLoaded", function () {
     const generateFiles = document.getElementById('generateFiles');
     const themeToggle = document.getElementById('themeToggle');
     const toggleButton = document.querySelector('.toggle-button');
-    const imageRatioAlert = document.getElementById("imageRatioAlert");
-    const resizeImagesBtn = document.getElementById("resizeImagesBtn");
     const body = document.body;
 
-    let nonSquareImages = [];
-
-    body.classList.add('dark'); // Default mode: dark
-    updateIcons(); // Set the correct initial icon state
-
-    function checkImageRatio(image) {
-        return image.width === image.height;
-    }
-
-    function showImageRatioAlert(imageElement) {
-        imageRatioAlert.style.display = "block";
-        showImageRatioAlert.imageElement = imageElement; // Store the image element here
-        resizeImagesBtn.imageElement = imageElement; // Assign the image element to the button as well
-        resizeImagesBtn.addEventListener('click', () => {
-            resizeImage(imageElement);
-        });
-    }
-
-    function resizeImage(imageElement) {
-        if (!imageElement) return;
-
-        const croppieImage = imageElement;
-        const currentContainer = croppieImage.parentElement;
-        const textarea = currentContainer.querySelector('textarea');
-
-        setTimeout(() => {
-            const croppieInstance = new Croppie(croppieImage, {
-                viewport: { width: 200, height: 200, type: 'square' },
-                boundary: { width: 200, height: 200 },
-                enableZoom: true,
-            });
-
-            currentContainer.appendChild(croppieInstance.element);
-
-            // Create a new div for the croppie controls
-            const croppieControls = document.createElement('div');
-            croppieControls.classList.add('croppie-controls');
-
-            // Add the confirm button
-            const confirmButton = document.createElement('button');
-            confirmButton.classList.add('confirm-button');
-            confirmButton.innerHTML = '&#10003;';
-            confirmButton.addEventListener('click', () => {
-                // Get the cropped image and replace the original image
-                croppieInstance.result({ type: 'base64', size: 'original', format: 'jpeg' }).then((result) => {
-                    const img = document.createElement('img');
-                    img.src = result;
-                    img.onload = () => {
-                        currentContainer.querySelector('img').src = result;
-                        currentContainer.querySelector('img').style.display = 'block';
-                        currentContainer.querySelector('.cr-boundary').remove();
-                        currentContainer.querySelector('.cr-slider-wrap').remove();
-                        confirmButton.remove();
-
-                        // Re-display the textarea
-                        textarea.style.display = 'block';
-                        // Append the textarea after the image
-                        currentContainer.querySelector('img').after(textarea);
-                    };
-                });
-            });
-
-            // Add the confirm button to the croppie controls div
-            croppieControls.appendChild(croppieInstance.element.querySelector('.cr-slider-wrap'));
-            croppieControls.appendChild(confirmButton);
-
-            // Add the croppie controls div to the current container
-            currentContainer.appendChild(croppieControls);
-
-        }, 0);
-    }
-
-
-
+    body.classList.add('dark');
+    updateIcons();
 
     themeToggle.addEventListener('change', () => {
-        if (body.classList.contains('dark')) {
-            body.classList.remove('dark');
-            body.classList.add('light');
-        } else {
-            body.classList.remove('light');
-            body.classList.add('dark');
-        }
+        body.classList.toggle('dark');
+        body.classList.toggle('light');
         updateIcons();
+        updateTextareaBackgroundColors();
     });
 
     toggleButton.addEventListener('click', () => {
@@ -101,17 +23,12 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     function updateIcons() {
-        if (body.classList.contains('dark')) {
-            document.querySelector('.light-icon').style.opacity = '1';
-            document.querySelector('.dark-icon').style.opacity = '0.2';
-        } else {
-            document.querySelector('.light-icon').style.opacity = '0.2';
-            document.querySelector('.dark-icon').style.opacity = '1';
-        }
+        const lightIcon = document.querySelector('.light-icon');
+        const darkIcon = document.querySelector('.dark-icon');
+        const darkMode = body.classList.contains('dark');
+        lightIcon.style.opacity = darkMode ? '1' : '0.2';
+        darkIcon.style.opacity = darkMode ? '0.2' : '1';
     }
-
-    updateIcons();
-
 
     dropArea.addEventListener('dragover', (e) => {
         e.preventDefault();
@@ -135,9 +52,27 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     function onTextareaInput(textarea) {
-        if (textarea.value.trim()) {
-            textarea.style.backgroundColor = '';
+        const darkMode = body.classList.contains('dark');
+        const empty = !textarea.value.trim();
+        if (textarea.highlight) {
+            textarea.style.backgroundColor = empty
+                ? (darkMode ? '#ECCC87' : '#3B4252')
+                : '';
         }
+    }
+    function updateTextareaBackgroundColors() {
+        const textareas = document.querySelectorAll('.imageContainer textarea');
+        textareas.forEach((textarea) => {
+            onTextareaInput(textarea);
+        });
+    }
+
+    function resetTextareaHighlights() {
+        const textareas = document.querySelectorAll('.imageContainer textarea');
+        textareas.forEach((textarea) => {
+            textarea.highlight = false;
+            textarea.style.backgroundColor = '';
+        });
     }
 
 
@@ -162,11 +97,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     const textarea = container.querySelector('textarea');
                     textarea.addEventListener('input', () => onTextareaInput(textarea));
-
-                    if (!checkImageRatio(img)) {
-                        nonSquareImages.push(img);
-                        showImageRatioAlert(imgElement);
-                    }
                 };
             };
         });
@@ -196,12 +126,8 @@ document.addEventListener("DOMContentLoaded", function () {
         errorMessage.style.display = 'none';
         imageContainers.forEach((container) => {
             const textarea = container.querySelector('textarea');
-            if (!textarea.value.trim()) {
-                emptyTextCount++;
-                textarea.style.backgroundColor = '#BF616A';
-            } else {
-                textarea.style.backgroundColor = '';
-            }
+            onTextareaInput(textarea);
+            if (!textarea.value.trim()) emptyTextCount++;
         });
 
         if (emptyTextCount > 0) {
@@ -214,63 +140,33 @@ document.addEventListener("DOMContentLoaded", function () {
             errorMessage.textContent = message;
             errorMessage.style.marginTop = '10px';
             errorMessage.style.display = 'inline';
-            errorMessage.style.color = '#BF616A';
-
-            const generateAnywayButton = document.createElement('a');
-            generateAnywayButton.textContent = "I want to generate anyway";
-            generateAnywayButton.className = 'button';
-            generateAnywayButton.addEventListener('click', async () => {
+            errorMessage.style.color = '';
+            const generateAnywayButton = createActionButton("I want to generate anyway", async () => {
                 generateFiles.disabled = true;
                 generateAnywayButton.remove();
                 writeNowButton.remove();
-                emptyTextCount = 0;
-                imageContainers.forEach((container) => {
-                    const textarea = container.querySelector('textarea');
-                    if (!textarea.value.trim()) {
-                        emptyTextCount++;
-                    }
-                });
-                for (const [index, container] of imageContainers.entries()) {
-                    const textarea = container.querySelector('textarea');
-                    const textFileName = `${index + 1}.txt`;
-                    zip.file(textFileName, textarea.value);
-                }
-                try {
-                    await processFiles(imageContainers, zip);
-                    const zipBlob = await zip.generateAsync({type: 'blob'});
-                    const link = document.createElement('a');
-                    link.href = URL.createObjectURL(zipBlob);
-                    link.download = 'images_text.zip';
-                    link.style.display = 'none';
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                } catch (err) {
-                    console.error(err);
-                    alert('An error occurred while generating the zip file.');
-                }
+                errorMessage.style.display = 'none';
+                await generateZipFile(zip, imageContainers);
             });
 
-            const writeNowButton = document.createElement('a');
-            writeNowButton.textContent = "I'm going to write them now";
-            writeNowButton.className = 'button';
-            writeNowButton.addEventListener('click', () => {
+            const writeNowButton = createActionButton("I'm going to write them now", () => {
                 generateFiles.disabled = false;
                 generateAnywayButton.remove();
                 writeNowButton.remove();
+                errorMessage.textContent = "I've highlighted the missing captions for you.";
+                errorMessage.style.color = '';
+                generateFiles.style.display = 'block';
+
                 imageContainers.forEach((container) => {
                     const textarea = container.querySelector('textarea');
                     if (!textarea.value.trim()) {
-                        textarea.style.backgroundColor = getComputedStyle(body).color;
-                    } else {
-                        textarea.style.backgroundColor = '';
+                        textarea.highlight = true;
                     }
+                    onTextareaInput(textarea);
                 });
-                errorMessage.textContent = "I've highlighted the missing captions for you.";
-                errorMessage.style.color = '';
             });
 
-            generateFiles.style.display = 'none'; // Hide 'Generate Captions' button
+            generateFiles.style.display = 'none';
             generateFiles.insertAdjacentElement('afterend', generateAnywayButton);
             generateFiles.insertAdjacentElement('afterend', writeNowButton);
 
@@ -284,25 +180,31 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        for (const [index, container] of imageContainers.entries()) {
-            const textarea = container.querySelector('textarea');
-            const textFileName = `${index + 1}.txt`;
-            zip.file(textFileName, textarea.value);
+        await generateZipFile(zip, imageContainers);
+
+        function createActionButton(text, onClick) {
+            const button = document.createElement('a');
+            button.textContent = text;
+            button.className = 'button';
+            button.addEventListener('click', onClick);
+            return button;
         }
 
-        try {
-            await processFiles(imageContainers, zip);
-            const zipBlob = await zip.generateAsync({type: 'blob'});
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(zipBlob);
-            link.download = 'images_text.zip';
-            link.style.display = 'none';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        } catch (err) {
-            console.error(err);
-            alert('An error occurred while generating the zip file.');
+        async function generateZipFile(zip, imageContainers) {
+            try {
+                await processFiles(imageContainers, zip);
+                const zipBlob = await zip.generateAsync({type: 'blob'});
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(zipBlob);
+                link.download = 'images_text.zip';
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } catch (err) {
+                console.error(err);
+                alert('An error occurred while generating the zip file.');
+            }
         }
     });
-});
+})
