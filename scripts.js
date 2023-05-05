@@ -102,18 +102,20 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    async function processFiles(imageContainers, zip) {
+    async function processFiles(imageContainers, zip, renameImages) {
+        let counter = 0;
         for (const container of imageContainers) {
             const textarea = container.querySelector('textarea');
             const img = container.querySelector('img');
             const fileName = img.dataset.filename;
             const fileExtension = fileName.split('.').pop();
-            const baseName = fileName.substring(0, fileName.lastIndexOf('.'));
+            const baseName = renameImages ? counter : fileName.substring(0, fileName.lastIndexOf('.'));
 
             zip.file(`${baseName}.txt`, textarea.value);
 
             const imgBlob = await fetch(img.src).then((response) => response.blob());
             zip.file(`${baseName}.${fileExtension}`, imgBlob);
+            if (renameImages) counter++;
         }
     }
 
@@ -121,6 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const zip = new JSZip();
         const imageContainers = document.querySelectorAll('.imageContainer');
         const errorMessage = document.getElementById('errorMessage');
+        const renameImages = document.getElementById('renameImages').checked;
         let emptyTextCount = 0;
 
         errorMessage.style.display = 'none';
@@ -192,7 +195,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         async function generateZipFile(zip, imageContainers) {
             try {
-                await processFiles(imageContainers, zip);
+                await processFiles(imageContainers, zip, renameImages);
                 const zipBlob = await zip.generateAsync({type: 'blob'});
                 const link = document.createElement('a');
                 link.href = URL.createObjectURL(zipBlob);
